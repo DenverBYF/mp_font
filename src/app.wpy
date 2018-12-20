@@ -7,17 +7,44 @@ import wepy from 'wepy'
 export default class extends wepy.app {
   config = {
     pages: [
-      'pages/index'
+      'pages/act/index',
+      'pages/my/index'
     ],
     window: {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#fff',
       navigationBarTitleText: 'WeChat',
       navigationBarTextStyle: 'black'
+    },
+    tabBar: {
+      list: [
+        {
+          pagePath: 'pages/act/index',
+          text: '活动',
+          iconPath: 'static/act.png',
+          selectedIconPath: 'static/act.png'
+        },
+        {
+          pagePath: 'pages/my/index',
+          text: '我的',
+          iconPath: 'static/my.png',
+          selectedIconPath: 'static/my.png'
+        }
+      ],
+      selectedColor: '#000'
     }
   }
 
   onLaunch() {
+    wx.login({
+      success (res) {
+        if (res.code) {
+          console.log('success', res)
+        } else {
+          console.log('登录失败！' + res.errMsg)
+        }
+      }
+    })
     console.log('on launch')
   }
 }
