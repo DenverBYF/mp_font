@@ -1,14 +1,21 @@
 <style lang="less">
+  @import url("../node_modules/weui-wxss/dist/app.wxss");
 </style>
 
 <script>
 import wepy from 'wepy'
+import 'wepy-async-function'
+import { login } from './util/util'
 
 export default class extends wepy.app {
   config = {
     pages: [
       'pages/act/index',
-      'pages/my/index'
+      'pages/my/index',
+      'pages/auth',
+      'pages/my/acts',
+      'pages/my/history',
+      'pages/my/product'
     ],
     window: {
       backgroundTextStyle: 'light',
@@ -34,18 +41,36 @@ export default class extends wepy.app {
       selectedColor: '#000'
     }
   }
+  globalData = {
+    userInfo: {}
+  }
 
   onLaunch() {
-    wx.login({
-      success (res) {
-        if (res.code) {
-          console.log('success', res)
-        } else {
-          console.log('登录失败！' + res.errMsg)
+    let that = this
+    login()
+    // 用户session，若存在，则已
+    const info = wx.getStorageSync('userinfo')
+    if (!info) {
+      console.log('get user info')
+      // 获取用户基本信息
+      wx.reLaunch({
+        url: 'pages/auth',
+        success: res => {
+          console.log(res)
+        },
+        fail: res => {
+          console.log('fail', res)
         }
-      }
-    })
-    console.log('on launch')
+      })
+    } else {
+      that.globalData.userInfo = info
+    }
+    console.log('app on launch', that.globalData.userInfo)
+  }
+
+  constructor () {
+    super()
+    this.use('promisify')
   }
 }
 </script>

@@ -1,0 +1,43 @@
+<style lang="less">
+  .info{
+    text-align: center;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    button {
+      margin-top: 50rpx;
+    }
+  }
+</style>
+<template>
+  <view class="container">
+    <view class="info">
+      抽奖小助手
+      <button type="primary" open-type="getUserInfo" bindgetuserinfo="userInfo">开始使用</button>
+    </view>
+
+  </view>
+
+</template>
+
+<script>
+  import wepy from 'wepy'
+  export default class Auth extends wepy.page {
+    config = {
+      'navigationBarTitleText': '抽奖小助手'
+    }
+    userInfo(e) {
+      let that = this
+      // 存入本地缓存
+      wx.setStorage({
+        key: 'userinfo',
+        data: e.detail.userInfo
+      })
+      that.$parent.globalData.userInfo = e.detail.userInfo
+      wx.reLaunch({
+        url: 'act/index'
+      })
+    }
+  }
+</script>

@@ -1,0 +1,19 @@
+<template>
+  <view>
+    history
+  </view>
+</template>
+
+<style lang="less">
+
+</style>
+
+<script>
+  import wepy from 'wepy'
+  export default class History extends wepy.page {
+    data = {}
+    onLoad() {
+      console.log('historys')
+    }
+  }
+</script>

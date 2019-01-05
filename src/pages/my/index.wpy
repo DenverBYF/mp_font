@@ -1,20 +1,77 @@
-<style lang="less">
-</style>
 <template>
   <view class="container">
-    我的
+    <view class="item-list">
+      <view class="user-item">
+        <image src="{{userinfo.avatarUrl}}" class="avatar"></image>
+        <view class="user-info">
+          {{userinfo.nickName}}
+        </view>
+      </view>
+      <list :info.sync="itemList"></list>
+    </view>
   </view>
 </template>
 
+<style lang="less">
+  .container{
+    background-color: whitesmoke;
+  }
+  .item-list{
+    margin: 0 20rpx;
+  }
+  .user-item{
+    display: flex;
+    align-items: baseline;
+    margin-top: 20rpx;
+    background-color: #fff;
+    .avatar{
+      margin: 20rpx;
+      width: 150rpx;
+      height: 150rpx
+    }
+    .user-info{
+      align-self: flex-start;
+      padding: 50rpx;
+      font-size: 40rpx;
+      font-weight: bolder;
+    }
+  }
+</style>
+
 <script>
   import wepy from 'wepy'
+  import List from '../../component/list'
 
   export default class MyIndex extends wepy.page {
-    config = {
-      navigationBarTitleText: '个人中心'
+    data = {
+      itemList: [
+        {
+          text: '我的活动',
+          url: 'acts',
+          icon: 'static/acts.png'
+        },
+        {
+          text: '历史详情',
+          url: 'history',
+          icon: 'static/history.png'
+        },
+        {
+          text: '产品说明',
+          url: 'product',
+          icon: 'static/info.png'
+        }
+      ],
+      userinfo: {}
+    }
+    components = {
+      list: List
     }
     onLoad() {
-      console.log('onLoad')
+      let that = this
+      that.userinfo = that.$parent.globalData.userInfo
+    }
+    config = {
+      navigationBarTitleText: '个人中心'
     }
   }
 </script>

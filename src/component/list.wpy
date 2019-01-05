@@ -1,0 +1,61 @@
+<template>
+  <repeat for="{{info}}" item="item">
+    <view class="list-item" @tap="clickFunc({{item.url}})">
+      <image src="../../{{item.icon}}" class="item-icon"></image>
+      <view class="item-text">
+        {{item.text}}
+      </view>
+      <image src="../../static/arrow.png" class="item-arrow"></image>
+    </view>
+  </repeat>
+</template>
+
+<style lang="less">
+  .list-item{
+    display: flex;
+    align-items: flex-start;
+    padding: 25rpx 5rpx;
+    margin: 20rpx 0;
+    background-color: #fff;
+    font-size: 30rpx;
+  }
+  .item-icon{
+    width: 50rpx;
+    height: 50rpx;
+  }
+  .item-text{
+    margin-left: 20rpx;
+  }
+  .item-arrow{
+    padding-top: 5rpx;
+    position: absolute;
+    right: 35rpx;
+    width: 40rpx;
+    height: 40rpx;
+  }
+</style>
+
+<script>
+  import wepy from 'wepy'
+  export default class List extends wepy.component {
+    component = {};
+    props = {
+      info: {
+        type: Array,
+        default: []
+      }
+    };
+    onLoad() {
+      console.log(this.info)
+    }
+    data = {
+    };
+    methods = {
+      clickFunc(url) {
+        wx.navigateTo({
+          url: url
+        })
+      }
+    }
+  }
+</script>
