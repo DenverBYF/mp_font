@@ -46,7 +46,6 @@
       }
     };
     onLoad() {
-      console.log(this.info)
     }
     data = {
     };
