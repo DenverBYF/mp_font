@@ -46,6 +46,11 @@
     data = {
       itemList: [
         {
+          text: '个人信息',
+          url: 'set',
+          icon: 'static/set.png'
+        },
+        {
           text: '我的活动',
           url: 'acts',
           icon: 'static/acts.png'

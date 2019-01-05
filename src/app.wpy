@@ -15,7 +15,8 @@ export default class extends wepy.app {
       'pages/auth',
       'pages/my/acts',
       'pages/my/history',
-      'pages/my/product'
+      'pages/my/product',
+      'pages/my/set'
     ],
     window: {
       backgroundTextStyle: 'light',
