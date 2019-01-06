@@ -1,18 +1,129 @@
 <template>
-  <view>
-    set
+  <view class="container">
+    <view class="setting">
+      个人信息仅用于奖品邮寄
+    </view>
+    <form bindsubmit="fromSubmit">
+      <view class="section">
+        <view class="title">姓名</view>
+        <input name="name" placeholder="请输入真实姓名" value="{{setting.name}}"/>
+      </view>
+      <view class="section">
+        <view class="title">地址</view>
+        <picker mode="region" value="{{region}}" bindchange="bindRegionChange" name="area">
+          <view class="picker">
+            当前选择：{{region[0]}}-{{region[1]}}-{{region[2]}}
+          </view>
+        </picker>
+      </view>
+      <view class="section">
+        <view class="title">详细地址</view>
+        <input name="detail" placeholder="请输入详细地址" value="{{detail}}"/>
+      </view>
+      <view class="section">
+        <view class="title">手机号码</view>
+        <input name="phone" placeholder="请输入手机号码" value="{{setting.phone}}"/>
+      </view>
+      <view class="section">
+        <view class="title">邮箱</view>
+        <input name="email" placeholder="请输入邮箱（可选）" value="{{setting.email}}"/>
+      </view>
+      <view class="btn-area">
+        <button form-type="submit" type="primary">提交</button>
+        <button form-type="reset">重置</button>
+      </view>
+    </form>
   </view>
 </template>
 
 <style lang="less">
-
+  .container {
+    margin: 15rpx;
+    background-color: whitesmoke;
+  }
+  .setting {
+    margin: 10rpx;
+    text-align: center;
+    font-size: 25rpx;
+    font-weight: lighter;
+  }
+  .section {
+    margin: 0 15rpx;
+    background-color: #fff;
+    padding: 10rpx;
+  }
+  .title {
+    font-size: 35rpx;
+    margin: 10rpx 10rpx;
+  }
+  input {
+    margin: 10rpx 15rpx;
+    border: whitesmoke solid 2rpx;
+  }
+  picker {
+    margin: 10rpx 15rpx;
+    border: whitesmoke solid 2rpx;
+  }
+  .picker {
+    font-weight: normal;
+  }
+  .btn-area {
+    margin: 10rpx 15rpx;
+  }
 </style>
 
 <script>
   import wepy from 'wepy'
+  import {req} from '../../util/util'
   export default class Set extends wepy.page {
-    data = {}
+    data = {
+      setting: {
+        name: '',
+        email: '',
+        phone: ''
+      },
+      detail: '',
+      region: ['陕西省', '西安市', '雁塔区']
+    }
+    method = {
+    }
     onLoad() {
+      let that = this
+      req({
+        url: '/mp/setting',
+        showLoading: true
+      }).then(res => {
+        console.log(res)
+        let tmp = res.data.data.address.split(' ')
+        let _region = tmp[0].split('-')
+        that.region = _region
+        that.setting = res.data.data
+        that.detail = tmp[1]
+        that.$apply()
+      })
+    }
+    fromSubmit (e) {
+      let area = e.detail.value.area.join('-')
+      let address = area + ' ' + e.detail.value.detail
+      let postData = {
+        'name': e.detail.value.name,
+        'phone': e.detail.value.phone,
+        'email': e.detail.value.email,
+        'address': address
+      }
+      req({
+        url: '/mp/setting',
+        showLoading: true,
+        method: 'POST',
+        data: postData
+      }).then(res => {
+        console.log(res)
+      })
+      // console.log(postData)
+    }
+    bindRegionChange (e) {
+      let that = this
+      that.region = e.detail.value
     }
   }
 </script>

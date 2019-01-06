@@ -1,8 +1,5 @@
 /* 公共函数文件 */
 const baseUrl = 'https://ivanbai.club'
-const baseHeader = {
-  'cookie': 'laravel_session=' + wx.getStorageSync('session')
-}
 
 /*
 * 获取用户基本信息，存入本地储存
@@ -42,6 +39,10 @@ function login() {
               key: 'session',
               data: res.header['Set-Cookie'].match(/laravel_session=(.*);/)[1].split(';')[0]
             })
+            wx.setStorage({
+              key: 'token',
+              data: res.header['Set-Cookie'].match(/XSRF-TOKEN=(.*);/)[1].split(';')[0]
+            });
           }
         }).catch(res => {
           console.log('error')
@@ -69,6 +70,9 @@ function req(obj = {
     wx.showLoading({
       title: 'Loading'
     })
+  }
+  let baseHeader = {
+    'cookie': 'laravel_session=' + wx.getStorageSync('session')
   }
   return new Promise((resolve, reject) => {
     wx.request({
