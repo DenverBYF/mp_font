@@ -93,7 +93,6 @@
         url: '/mp/setting',
         showLoading: true
       }).then(res => {
-        console.log(res)
         let tmp = res.data.data.address.split(' ')
         let _region = tmp[0].split('-')
         that.region = _region

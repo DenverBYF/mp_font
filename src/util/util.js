@@ -20,7 +20,7 @@ function getUserInfo() {
 /*
 * 用户登陆函数，获取平台session，存入本地储存
 */
-function login() {
+function login(url = '') {
   wx.login({
     success (res) {
       if (res.code) {
@@ -37,12 +37,24 @@ function login() {
             console.log('login success')
             wx.setStorage({
               key: 'session',
-              data: res.header['Set-Cookie'].match(/laravel_session=(.*);/)[1].split(';')[0]
+              data: res.header['Set-Cookie'].match(/laravel_session=(.*);/)[1].split(';')[0],
+              success: res => {
+                console.log(res)
+                wx.hideLoading()
+                if (url !== '') {
+                  wx.redirectTo({
+                    url: '/' + url,
+                    fail: res => {
+                      console.log('fail', res)
+                    }
+                  })
+                }
+              }
             })
             wx.setStorage({
               key: 'token',
-              data: res.header['Set-Cookie'].match(/XSRF-TOKEN=(.*);/)[1].split(';')[0]
-            });
+              data: res.header['Set-Cookie'].match(/XSRF-TOKEN=(.*);/)[1].split(';')[0],
+            })
           }
         }).catch(res => {
           console.log('error')
@@ -83,7 +95,30 @@ function req(obj = {
       dataType: obj.dataType,
       responseType: obj.responseType,
       success: res => {
-        resolve(res)
+        if (res.statusCode === 403) {
+          // 登陆过期，重新执行login，更新本地缓存的session后再重新发送请求
+          wx.hideLoading()
+          wx.showModal({
+            title: '登陆过期',
+            content: '您的身份认证信息已过期，请重新登陆',
+            confirmText: '重新登陆',
+            success: res => {
+              if (res.confirm) {
+                // eslint-disable-next-line no-undef
+                let pages = getCurrentPages()
+                let url = pages[pages.length - 1].route
+                wx.showLoading({
+                  title: '登陆中'
+                })
+                login(url)
+              } else if (res.cancel) {
+                console.log('cancel')
+              }
+            }
+          })
+        } else {
+          resolve(res)
+        }
       },
       fail: res => {
         reject(res)
