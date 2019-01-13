@@ -1,17 +1,66 @@
 <template>
-  <view>
-    acts
+  <view class="container">
+    <cell :info.sync="info"></cell>
   </view>
 </template>
 
 <style lang="less">
-
+  .container {
+    background-color: whitesmoke;
+  }
 </style>
 
 <script>
   import wepy from 'wepy'
+  import Cell from '../../component/cell'
   export default class Acts extends wepy.page {
-    data = {}
+    config = {
+      navigationBarTitleText: '我的活动',
+      navigationBarTextStyle: 'black'
+    }
+    components = {
+      cell: Cell
+    }
+    data = {
+      info: [
+        {
+          id: 1,
+          title: '测试活动1',
+          date: '报名截止至 2018-01-15',
+          status: {
+            status: 1,
+            text: '报名中'
+          }
+        },
+        {
+          id: 2,
+          title: '测试活动1',
+          date: '开奖日期 2018-01-15',
+          status: {
+            status: 2,
+            text: '等待开奖'
+          }
+        },
+        {
+          id: 3,
+          title: '测试活动1',
+          date: '2018-01-13',
+          status: {
+            status: 3,
+            text: '未中奖'
+          }
+        },
+        {
+          id: 4,
+          title: '测试活动1',
+          date: '2018-01-13',
+          status: {
+            status: 4,
+            text: '中奖啦'
+          }
+        }
+      ]
+    }
     onLoad() {
       console.log('acts')
     }

@@ -1,0 +1,75 @@
+<template>
+  <repeat for="{{info}}" item="item">
+    <view class="cell" @tap="clickFunc({{item.id}})">
+      <view class="cell-title">
+        {{item.title}}
+        <image wx:if="{{item.status.status === 4}}" src="/static/start.png" class="cell-owner"></image>
+      </view>
+      <view class="cell-status" style="color: {{statusStyle[item.status.status - 1]}}">
+        {{item.status.text}}
+      </view>
+      <view class="cell-desc">
+        {{item.date}}
+      </view>
+    </view>
+  </repeat>
+</template>
+
+<style scoped lang="less">
+  .cell {
+    margin: 20rpx 20rpx;
+    background-color: #fff;
+    &-title {
+      float: left;
+      font-size: 35rpx;
+      padding-top: 10rpx;
+      padding-left: 15rpx;
+    }
+    &-status {
+      float: right;
+      font-size: 28rpx;
+      padding-top: 10rpx;
+      padding-right: 30rpx;
+    }
+    &-desc {
+      clear: both;
+      color: rgba(0, 0, 0, 0.5);
+      padding-top: 20rpx;
+      padding-left: 15rpx;
+      padding-bottom: 15rpx;
+    }
+    &-owner {
+      display: inline-block;
+      width: 30rpx;
+      height: 30rpx;
+    }
+  }
+
+</style>
+
+<script>
+  import wepy from 'wepy'
+  export default class Cell extends wepy.component {
+    component = {};
+    props = {
+      info: {
+        type: Array,
+        default: []
+      }
+    };
+    data = {
+      statusStyle: [
+        '#7f7f7f',
+        '#576b95',
+        '#e64340',
+        '#00c777'
+      ]
+    }
+    methods = {
+      clickFunc(id) {
+        // todo 活动详情页
+        console.log(id)
+      }
+    }
+  }
+</script>

@@ -43,6 +43,10 @@
   import List from '../../component/list'
 
   export default class MyIndex extends wepy.page {
+    config = {
+      navigationBarTitleText: '个人中心',
+      navigationBarTextStyle: 'black'
+    }
     data = {
       itemList: [
         {
@@ -51,7 +55,7 @@
           icon: 'static/set.png'
         },
         {
-          text: '我的活动',
+          text: '我创建的',
           url: 'acts',
           icon: 'static/acts.png'
         },

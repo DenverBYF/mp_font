@@ -76,6 +76,10 @@
   import wepy from 'wepy'
   import {req} from '../../util/util'
   export default class Set extends wepy.page {
+    config = {
+      navigationBarTitleText: '个人信息',
+      navigationBarTextStyle: 'black'
+    }
     data = {
       setting: {
         name: '',
