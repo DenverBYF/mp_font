@@ -1,21 +1,126 @@
-<style lang="less">
-</style>
 <template>
   <view class="container">
-    主页面
+    <view class="acts">
+      <cell :info.sync="info"></cell>
+    </view>
+    <view class="create" >
+      <image src="/static/create.png" class="create-icon" style="width: 100rpx;height: 100rpx" @tap="create()"></image>
+    </view>
   </view>
 </template>
 
+<style lang="less">
+  .acts {
+    height: 100%;
+    overflow: scroll;
+    position: static;
+  }
+  .create {
+    position: fixed;
+    bottom: 40rpx;
+    right: 80rpx;
+    z-index: 9999;
+  }
+</style>
+
 <script>
   import wepy from 'wepy'
+  import Cell from '../../component/cell'
 
   export default class ActIndex extends wepy.page {
     config = {
       navigationBarTitleText: '抽奖平台'
     }
+    components = {
+      cell: Cell
+    }
+    data = {
+      info: [
+        {
+          id: 1,
+          title: '测试活动1',
+          date: '报名截止至 2018-01-15',
+          status: {
+            status: 1,
+            text: '报名中'
+          }
+        },
+        {
+          id: 2,
+          title: '测试活动1',
+          date: '开奖日期 2018-01-15',
+          status: {
+            status: 2,
+            text: '等待开奖'
+          }
+        },
+        {
+          id: 3,
+          title: '测试活动1',
+          date: '2018-01-13',
+          status: {
+            status: 3,
+            text: '未中奖'
+          }
+        },
+        {
+          id: 4,
+          title: '测试活动1',
+          date: '2018-01-13',
+          status: {
+            status: 4,
+            text: '中奖啦'
+          }
+        },
+        {
+          id: 1,
+          title: '测试活动1',
+          date: '报名截止至 2018-01-15',
+          status: {
+            status: 1,
+            text: '报名中'
+          }
+        },
+        {
+          id: 2,
+          title: '测试活动1',
+          date: '开奖日期 2018-01-15',
+          status: {
+            status: 2,
+            text: '等待开奖'
+          }
+        },
+        {
+          id: 3,
+          title: '测试活动1',
+          date: '2018-01-13',
+          status: {
+            status: 3,
+            text: '未中奖'
+          }
+        },
+        {
+          id: 4,
+          title: '测试活动1',
+          date: '2018-01-13',
+          status: {
+            status: 4,
+            text: '中奖啦'
+          }
+        }
+      ]
+    }
     onLoad() {
       // let that = this
       // console.log('onLoad', that.$parent.globalData.userInfo)
+    }
+    methods = {
+      create() {
+        wx.navigateTo({
+          url: 'create'
+        })
+        console.log('create')
+      }
     }
   }
 </script>

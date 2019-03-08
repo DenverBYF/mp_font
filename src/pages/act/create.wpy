@@ -1,0 +1,237 @@
+<template>
+  <view class="container">
+    <form bindsubmit="formSubmit">
+      <view class="section">
+        <view class="title">活动名称</view>
+        <input name="name" placeholder="活动名称"/>
+      </view>
+      <view class="section section-people">
+        <view class="numberT">
+          <view class="title">参与人数</view>
+          <input name="numberT" placeholder="参与人数"/>
+        </view>
+        <view class="numberZ">
+          <view class="title">中奖人数</view>
+          <input name="numberZ" placeholder="中奖人数"/>
+        </view>
+      </view>
+      <view class="section">
+        <view class="title">活动描述</view>
+        <textarea name="desc" placeholder="活动描述（不超过150字）" maxlength="150" auto-height></textarea>
+      </view>
+      <view class="section section-gift">
+        <view class="name">
+          <view class="title">礼品名称</view>
+          <input name="giftName" placeholder="礼品名称"/>
+        </view>
+        <view class="image">
+          <view class="title">礼物图片</view>
+          <button size="mini" @tap="image()">选择图片</button>
+        </view>
+      </view>
+      <view class="section section-rule">
+        <view class="time">
+          <view class="title">开奖日期</view>
+          <picker
+            mode="date"
+            value="{{date}}"
+            start="2015-09-01"
+            end="2099-12-31"
+            bindchange="bindDateChange"
+            name="date"
+          >
+            <view class="picker">
+              当前选择: {{date}}
+            </view>
+          </picker>
+        </view>
+        <view class="way">
+          <view class="title">开奖时间</view>
+          <picker
+            mode="time"
+            value="{{time}}"
+            start="00:00"
+            end="23:59"
+            bindchange="bindTimeChange"
+            name="time"
+          >
+            <view class="picker">
+              当前选择: {{time}}
+            </view>
+          </picker>
+        </view>
+      </view>
+      <view class="section">
+        <view class="title">开奖规则</view>
+        <picker
+          mode="selector"
+          range="{{range}}"
+          bindchange="bindRuleChange"
+        >
+          <view class="picker">
+            当前选择: {{range[rangeIndex]}}
+          </view>
+        </picker>
+      </view>
+      <view class="btn-area">
+        <button form-type="submit" type="primary">提交</button>
+        <button form-type="reset">重置</button>
+      </view>
+    </form>
+  </view>
+</template>
+<style lang="less">
+  .container {
+    margin: 15rpx;
+    background-color: whitesmoke;
+  }
+  .setting {
+    margin: 10rpx;
+    text-align: center;
+    font-size: 25rpx;
+    font-weight: lighter;
+  }
+  .section {
+    margin: 0 15rpx;
+    background-color: #fff;
+    padding: 10rpx;
+  }
+  .section-people {
+    display: flex;
+  }
+  .section-gift {
+    display: flex;
+  }
+  .section-rule {
+    display: flex;
+  }
+  .picker {
+    margin: 10rpx 15rpx;
+    border: whitesmoke solid 2rpx;
+  }
+  .title {
+    font-size: 30rpx;
+    margin: 10rpx 10rpx;
+  }
+  input {
+    margin: 10rpx 15rpx;
+    border: whitesmoke solid 2rpx;
+  }
+  textarea {
+    margin: 10rpx 15rpx;
+    border: whitesmoke solid 2rpx;
+  }
+  .btn-area {
+    margin: 10rpx 15rpx;
+  }
+</style>
+
+<script>
+  import wepy from 'wepy'
+  // import {req} from '../../util/util'
+
+  export default class ActCreate extends wepy.page {
+    config = {
+      navigationBarTitleText: '创建活动'
+    }
+    data = {
+      imagePath: '',
+      errMsg: '',
+      date: '2019-03-08',
+      time: '',
+      range: [
+        '默认规则',
+        '时时彩规则',
+        '待开发'
+      ],
+      rangeIndex: 0
+    }
+    methods = {
+      image() {
+        wx.chooseImage({
+          count: 1,
+          sizeType: ['original', 'compressed'],
+          sourceType: ['album', 'camera'],
+          success(res) {
+            let that = this
+            that.imagePath = res.tempFilePaths[0]
+          }
+        })
+      }
+    }
+    onLoad() {
+      let that = this
+      let date = new Date()
+      let seperator1 = '-'
+      let month = date.getMonth() + 1
+      let strDate = date.getDate()
+      if (month >= 1 && month <= 9) {
+        month = '0' + month
+      }
+      if (strDate >= 0 && strDate <= 9) {
+        strDate = '0' + strDate
+      }
+      let currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
+      that.date = currentdate
+      that.time = date.getHours() + ':' + date.getMinutes()
+    }
+    formSubmit (e) {
+      let that = this
+      let selectTime = that.date + ' ' + that.time + ':00'
+      let date = new Date(selectTime)
+      let time = Date.parse(date) / 1000
+      console.log(time)
+      let value = e.detail.value
+      if (that.parseInput(value)) {
+        wx.showToast({
+          title: that.errMsg,
+          icon: 'none'
+        })
+      }
+      let postData = {
+        'title': e.detail.value.name,
+        'desc': e.detail.value.desc,
+        'max_number': e.detail.value.numberT,
+        'gift_number': e.detail.value.numberZ,
+        'pay_value': 1,
+        'rule_id': that.rangeIndex,
+        'gift_name': e.detail.value.giftName,
+        'gift_desc': 'test',
+        'open_time': time
+      }
+      console.log(postData)
+      wx.uploadFile({
+        url: 'https://ivanbai.club/mp/act/',
+        filePath: that.imagePath,
+        name: 'gift',
+        formData: postData,
+        success(res) {
+          console.log(res.data)
+        }
+      })
+    }
+    parseInput(value) {
+      let that = this
+      if (value.numberT < value.numberZ) {
+        that.errMsg = '中奖人数必须大于参与人数'
+        return 1
+      }
+      if (value.name === '') {
+        that.errMsg = '请输入标题'
+        return 1
+      }
+    }
+    bindTimeChange(e) {
+      let that = this
+      that.time = e.detail.value
+    }
+    bindDateChange(e) {
+      let that = this
+      that.date = e.detail.value
+    }
+    bindRuleChange(e) {
+      let that = this
+      that.rangeIndex = e.detail.value
+    }
+  }
+</script>

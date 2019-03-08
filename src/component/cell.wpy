@@ -1,6 +1,6 @@
 <template>
   <repeat for="{{info}}" item="item">
-    <view class="cell" @tap="clickFunc({{item.id}})">
+    <view class="cell" @tap="clickFunc({{item}})">
       <view class="cell-title">
         {{item.title}}
         <image wx:if="{{item.status.status === 4}}" src="/static/start.png" class="cell-owner"></image>
@@ -9,7 +9,12 @@
         {{item.status.text}}
       </view>
       <view class="cell-desc">
-        {{item.date}}
+        <view class="desc">
+          {{item.date}}
+        </view>
+        <view wx:if="{{item.status.status === 1}}" class="join">
+          <image src="/static/join.png" style="height: 30rpx; width: 40rpx"></image>
+        </view>
       </view>
     </view>
   </repeat>
@@ -17,6 +22,7 @@
 
 <style scoped lang="less">
   .cell {
+    position: relative;
     margin: 20rpx 20rpx;
     background-color: #fff;
     &-title {
@@ -33,10 +39,16 @@
     }
     &-desc {
       clear: both;
-      color: rgba(0, 0, 0, 0.5);
-      padding-top: 20rpx;
-      padding-left: 15rpx;
-      padding-bottom: 15rpx;
+      .desc {
+        color: rgba(0, 0, 0, 0.5);
+        padding: 20rpx 40rpx 15rpx 15rpx;
+      }
+      .join {
+        position: absolute;
+        right: 30rpx;
+        bottom: 10rpx;
+        z-index: 9999;
+      }
     }
     &-owner {
       display: inline-block;
