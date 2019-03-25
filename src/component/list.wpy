@@ -1,11 +1,11 @@
 <template>
   <repeat for="{{info}}" item="item">
     <view class="list-item" @tap="clickFunc({{item.url}})">
-      <image src="../../{{item.icon}}" class="item-icon"></image>
+      <image src="/{{item.icon}}" class="item-icon"></image>
       <view class="item-text">
         {{item.text}}
       </view>
-      <image src="../../static/arrow.png" class="item-arrow"></image>
+      <image src="/static/arrow.png" class="item-arrow"></image>
     </view>
   </repeat>
 </template>
