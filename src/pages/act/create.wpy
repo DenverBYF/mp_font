@@ -29,6 +29,10 @@
           <button size="mini" @tap="image()">选择图片</button>
         </view>
       </view>
+      <view class="section">
+        <view class="title">礼物描述</view>
+        <textarea name="giftDesc" placeholder="活动描述（不超过150字）" maxlength="150" auto-height></textarea>
+      </view>
       <view class="section section-rule">
         <view class="time">
           <view class="title">开奖日期</view>
@@ -128,7 +132,7 @@
 
 <script>
   import wepy from 'wepy'
-  // import {req} from '../../util/util'
+  import {login} from '../../util/util'
 
   export default class ActCreate extends wepy.page {
     config = {
@@ -148,12 +152,12 @@
     }
     methods = {
       image() {
+        let that = this
         wx.chooseImage({
           count: 1,
           sizeType: ['original', 'compressed'],
           sourceType: ['album', 'camera'],
           success(res) {
-            let that = this
             that.imagePath = res.tempFilePaths[0]
           }
         })
@@ -187,6 +191,7 @@
           title: that.errMsg,
           icon: 'none'
         })
+        return
       }
       let postData = {
         'title': e.detail.value.name,
@@ -196,23 +201,62 @@
         'pay_value': 1,
         'rule_id': that.rangeIndex,
         'gift_name': e.detail.value.giftName,
-        'gift_desc': 'test',
+        'gift_desc': e.detail.value.giftDesc,
         'open_time': time
       }
-      console.log(postData)
+      console.log(postData, that.imagePath)
       wx.uploadFile({
         url: 'https://ivanbai.club/mp/act/',
         filePath: that.imagePath,
         name: 'gift',
+        header: {
+          'cookie': 'laravel_session=' + wx.getStorageSync('session')
+        },
         formData: postData,
         success(res) {
-          console.log(res.data)
+          let resData = JSON.parse(res.data)
+          if (res.statusCode === 403) {
+            wx.showModal({
+              title: '登陆过期',
+              content: '您的身份认证信息已过期，请重新登陆',
+              confirmText: '重新登陆',
+              success: res => {
+                if (res.confirm) {
+                  // eslint-disable-next-line no-undef
+                  let pages = getCurrentPages()
+                  let url = pages[pages.length - 1].route
+                  wx.showLoading({
+                    title: '登陆中'
+                  })
+                  login(url)
+                } else if (res.cancel) {
+                  console.log('cancel')
+                }
+              }
+            })
+          }
+          if (resData.ret_code === 0) {
+            wx.showToast({
+              title: '创建成功'
+            })
+            setTimeout(function() {
+              wx.reLaunch({
+                url: 'index'
+              })
+            }, 2000)
+          } else {
+            wx.showModal({
+              title: '创建失败',
+              content: resData.ret_msg,
+              showCancel: false
+            })
+          }
         }
       })
     }
     parseInput(value) {
       let that = this
-      if (value.numberT < value.numberZ) {
+      if (value.numberT <= value.numberZ) {
         that.errMsg = '中奖人数必须大于参与人数'
         return 1
       }

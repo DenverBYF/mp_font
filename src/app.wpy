@@ -17,7 +17,8 @@ export default class extends wepy.app {
       'pages/my/history',
       'pages/my/product',
       'pages/my/set',
-      'pages/act/create'
+      'pages/act/create',
+      'pages/act/detail'
     ],
     window: {
       backgroundTextStyle: 'light',
@@ -54,6 +55,7 @@ export default class extends wepy.app {
     }
     // 用户session，若存在，则已成功获取用户信息
     const info = wx.getStorageSync('userinfo')
+    console.log(info)
     if (!info) {
       console.log('get user info')
       // 获取用户基本信息

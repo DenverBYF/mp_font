@@ -43,7 +43,7 @@ function login(url = '') {
                 wx.hideLoading()
                 if (url !== '') {
                   wx.redirectTo({
-                    url: '/' + url,
+                    url: url,
                     fail: res => {
                       console.log('fail', res)
                     }
@@ -117,7 +117,15 @@ function req(obj = {
             }
           })
         } else {
-          resolve(res)
+          if (res.data.ret_code === 0) {
+            resolve(res)
+          } else {
+            wx.showModal({
+              title: '',
+              content: res.data.ret_msg,
+              showCancel: false
+            })
+          }
         }
       },
       fail: res => {

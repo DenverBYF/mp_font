@@ -3,16 +3,24 @@
     <view class="cell" @tap="clickFunc({{item}})">
       <view class="cell-title">
         {{item.title}}
-        <image wx:if="{{item.status.status === 4}}" src="/static/start.png" class="cell-owner"></image>
+        <image wx:if="{{item.status === 4}}" src="/static/start.png" class="cell-owner"></image>
       </view>
-      <view class="cell-status" style="color: {{statusStyle[item.status.status - 1]}}">
-        {{item.status.text}}
+      <view class="cell-status">
+        <span wx:if="{{item.status === 0}}" style="color: #00c777">
+          可参与（{{item.people.now}} / {{item.people.max}}）
+        </span>
+        <span wx:if="{{item.status === 1}}" style="color: #7f7f7f">
+          人数已满
+        </span>
+        <span wx:if="{{item.status === 2}}" style="color: #576b95">
+          已开奖
+        </span>
       </view>
       <view class="cell-desc">
         <view class="desc">
-          {{item.date}}
+          开奖时间： {{item.date}}
         </view>
-        <view wx:if="{{item.status.status === 1}}" class="join">
+        <view wx:if="{{item.status === 0}}" class="join">
           <image src="/static/join.png" style="height: 30rpx; width: 40rpx"></image>
         </view>
       </view>
@@ -69,18 +77,15 @@
         default: []
       }
     };
-    data = {
-      statusStyle: [
-        '#7f7f7f',
-        '#576b95',
-        '#e64340',
-        '#00c777'
-      ]
+    onLoad() {
+      console.log(this.info)
     }
     methods = {
-      clickFunc(id) {
-        // todo 活动详情页
-        console.log(id)
+      clickFunc(item) {
+        // 进入活动详情页
+        wx.navigateTo({
+          url: 'detail?id=' + item.id
+        })
       }
     }
   }

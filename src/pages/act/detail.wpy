@@ -1,0 +1,160 @@
+<template>
+  <view class="container">
+    <view class="gift-image">
+      <image src="{{actInfo.gift.url}}"></image>
+    </view>
+    <view class="act">
+      <view class="act-name">
+        {{actInfo.title}}
+      </view>
+      <view class="act-create">
+        {{actInfo.user.name}}
+      </view>
+    </view>
+    <view class="gift">
+      <view class="gift-name">
+        {{actInfo.gift.name}} (礼物数量：{{actInfo.people.gift}})
+      </view>
+      <view class="gift-desc">
+        {{actInfo.gift.desc}}
+      </view>
+    </view>
+    <view class="desc">
+      {{actInfo.desc}}
+    </view>
+    <view class="footer">
+      <view class="footer-number">
+        <p>当前人数: {{actInfo.people.now}}</p>
+        <p>最大人数: {{actInfo.people.max}}</p>
+      </view>
+      <view class="footer-button" @tap="join">
+        <span>立即参与</span>
+      </view>
+    </view>
+  </view>
+</template>
+<style lang="less">
+  page {
+    background: #fff;
+  }
+  .gift-image {
+    image {
+      width: 100%;
+      height: 500rpx;
+    }
+    border-bottom: 1px whitesmoke solid;
+  }
+  .act {
+    margin-top: 30rpx;
+    display: flex;
+    align-content: center;
+    justify-content: space-between;
+    padding: 5rpx 48rpx;
+    font-size: 34rpx;
+    &-name {
+      font-weight: bold;
+    }
+    border-bottom: 1px whitesmoke solid;
+  }
+  .gift {
+    margin-top: 30rpx;
+    padding: 5rpx 48rpx;
+    &-name {
+      font-size: 34rpx;
+      font-weight: bold;
+    }
+    &-desc {
+      margin-top: 8rpx;
+      font-size: 28rpx;
+      margin-bottom: 8rpx;
+    }
+    border-bottom: 1px whitesmoke solid;
+  }
+  .desc {
+    margin-top: 30rpx;
+    padding: 5rpx 48rpx;
+    font-size: 28rpx;
+  }
+  .footer {
+    position: fixed;
+    bottom: 0;
+    height: 90rpx;
+    width: 100%;
+    background: whitesmoke;
+    display: flex;
+    &-number {
+      width: 50%;
+      height: 100%;
+      font-size: 28rpx;
+      display: flex;
+      flex-direction: column;
+      align-content: center;
+      justify-content: center;
+      padding-left: 48rpx;
+    }
+    &-button {
+      height: 100%;
+      background: lightblue;
+      position: absolute;
+      right: 0;
+      width: 50%;
+      font-size: 34rpx;
+      text-align: center;
+      display: table;
+      span {
+        display: table-cell;
+        vertical-align: middle;
+      }
+    }
+  }
+</style>
+<script>
+  import wepy from 'wepy'
+  import {req} from '../../util/util'
+
+  export default class ActDetail extends wepy.page {
+    data = {
+      actInfo: '',
+      id: ''
+    }
+    methods = {
+      join() {
+        let id = this.id
+        req({
+          url: '/mp/join',
+          showLoading: false,
+          data: {
+            act: id
+          }
+        }).then(res => {
+          if (res.data.ret_code === 0) {
+            wx.showModal({
+              title: '',
+              content: '参与成功，请等待开奖',
+              showCancel: false,
+              success: res => {
+                if (res.confirm) {
+                  wx.reLaunch({
+                    url: 'index'
+                  })
+                }
+              }
+            })
+          }
+        })
+      }
+    }
+    onLoad(option) {
+      let that = this
+      that.id = option.id
+      req({
+        url: '/mp/act/' + option.id,
+        showLoading: true
+      }).then(res => {
+        console.log(res)
+        that.actInfo = res.data.ret_data
+        that.$apply()
+      })
+    }
+  }
+</script>
