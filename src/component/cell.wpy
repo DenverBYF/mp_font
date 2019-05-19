@@ -73,15 +73,12 @@
 <script>
   import wepy from 'wepy'
   export default class Cell extends wepy.component {
-    component = {};
+    component = {}
     props = {
       info: {
         type: Array,
         default: []
       }
-    };
-    onLoad() {
-      console.log(this.info)
     }
     methods = {
       clickFunc(item) {

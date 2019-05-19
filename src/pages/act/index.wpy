@@ -45,7 +45,6 @@
         url: '/mp/act',
         showLoading: true
       }).then(res => {
-        console.log(res.data.ret_data)
         that.info = res.data.ret_data
         that.$apply()
       })
@@ -55,7 +54,6 @@
         wx.navigateTo({
           url: 'create'
         })
-        console.log('create')
       }
     }
   }

@@ -1,6 +1,6 @@
 <template>
   <view class="container">
-    <form bindsubmit="formSubmit">
+    <form bindsubmit="formSubmit" report-submit="true">
       <view class="section">
         <view class="title">活动名称</view>
         <input name="name" placeholder="活动名称"/>
@@ -202,7 +202,8 @@
         'rule_id': that.rangeIndex + 1,
         'gift_name': e.detail.value.giftName,
         'gift_desc': e.detail.value.giftDesc,
-        'open_time': time
+        'open_time': time,
+        'form_id': e.detail.formId
       }
       console.log(postData, that.imagePath)
       wx.uploadFile({
@@ -256,8 +257,8 @@
     }
     parseInput(value) {
       let that = this
-      if (value.numberT <= value.numberZ) {
-        that.errMsg = '中奖人数必须大于参与人数'
+      if (parseInt(value.numberT) <= parseInt(value.numberZ)) {
+        that.errMsg = '中奖人数必须小于参与人数'
         return 1
       }
       if (value.name === '') {
