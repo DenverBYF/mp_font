@@ -42,7 +42,7 @@ function login(url = '') {
                 console.log(res)
                 wx.hideLoading()
                 if (url !== '') {
-                  wx.redirectTo({
+                  wx.reLaunch({
                     url: url,
                     fail: res => {
                       console.log('fail', res)

@@ -50,9 +50,6 @@ export default class extends wepy.app {
 
   onLaunch() {
     let that = this
-    if (!wx.getStorageSync('session')) {
-      login()
-    }
     // 用户session，若存在，则已成功获取用户信息
     const info = wx.getStorageSync('userinfo')
     console.log(info)
@@ -70,6 +67,9 @@ export default class extends wepy.app {
       })
     } else {
       that.globalData.userInfo = info
+    }
+    if (!wx.getStorageSync('session')) {
+      login()
     }
     console.log('app on launch', that.globalData.userInfo)
   }

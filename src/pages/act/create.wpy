@@ -199,7 +199,7 @@
         'max_number': e.detail.value.numberT,
         'gift_number': e.detail.value.numberZ,
         'pay_value': 1,
-        'rule_id': that.rangeIndex,
+        'rule_id': that.rangeIndex + 1,
         'gift_name': e.detail.value.giftName,
         'gift_desc': e.detail.value.giftDesc,
         'open_time': time

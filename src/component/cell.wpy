@@ -13,6 +13,9 @@
           人数已满
         </span>
         <span wx:if="{{item.status === 2}}" style="color: #576b95">
+          已参与
+        </span>
+        <span wx:if="{{item.status === 3}}" style="color: yellow">
           已开奖
         </span>
       </view>
