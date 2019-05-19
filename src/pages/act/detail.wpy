@@ -27,9 +27,20 @@
         <p>当前人数: {{actInfo.people.now}}</p>
         <p>最大人数: {{actInfo.people.max}}</p>
       </view>
-      <form bindsubmit="join" report-submit="true">
+      <form wx:if="{{actInfo.status < 2}}" bindsubmit="join" report-submit="true">
         <button class="footer-button" form-type="submit" style="border-radius: 0">立即参与</button>
       </form>
+      <view wx:else class="footer-button" style="opacity: 0.4">
+        <span wx:if="{{actInfo.status === 4}}">
+          您已中奖
+        </span>
+        <span wx:if="{{actInfo.status === 5}}">
+          您未中奖
+        </span>
+        <span wx:if="{{actInfo.status === 2}}">
+          您已参加
+        </span>
+      </view>
     </view>
   </view>
 </template>

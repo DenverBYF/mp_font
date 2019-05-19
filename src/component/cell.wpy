@@ -18,6 +18,12 @@
         <span wx:if="{{item.status === 3}}" style="color: yellow">
           已开奖
         </span>
+        <span wx:if="{{item.status === 4}}" style="color: palevioletred">
+          中奖啦
+        </span>
+        <span wx:if="{{item.status === 5}}" style="color: black">
+          很遗憾
+        </span>
       </view>
       <view class="cell-desc">
         <view class="desc">
