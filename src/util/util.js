@@ -117,7 +117,7 @@ function req(obj = {
             }
           })
         } else {
-          if (res.data.ret_code === 0) {
+          if (res.data.ret_code === 0 || res.ret_code === 1000) {
             resolve(res)
           } else {
             wx.showModal({

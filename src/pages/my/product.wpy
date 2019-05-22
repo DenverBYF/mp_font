@@ -1,11 +1,13 @@
 <template>
-  <view>
-    product
+  <view class="container">
+    一个抽奖平台
   </view>
 </template>
 
 <style lang="less">
-
+  .container {
+    padding: 20rpx;
+  }
 </style>
 
 <script>

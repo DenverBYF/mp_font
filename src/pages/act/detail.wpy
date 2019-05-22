@@ -124,6 +124,9 @@
   import {req} from '../../util/util'
 
   export default class ActDetail extends wepy.page {
+    config = {
+      navigationBarTitleText: '活动详情'
+    }
     data = {
       actInfo: '',
       id: ''
@@ -149,6 +152,19 @@
                 if (res.confirm) {
                   wx.reLaunch({
                     url: 'index'
+                  })
+                }
+              }
+            })
+          } else if (res.data.ret_code === 0) {
+            wx.showModal({
+              title: '',
+              content: '请先完善个人信息，以便于奖品邮寄',
+              showCancel: false,
+              success: res => {
+                if (res.confirm) {
+                  wx.reLaunch({
+                    url: '../my/set'
                   })
                 }
               }

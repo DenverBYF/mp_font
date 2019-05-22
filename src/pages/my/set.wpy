@@ -120,7 +120,11 @@
         method: 'POST',
         data: postData
       }).then(res => {
-        console.log(res)
+        wx.showToast({
+          title: '成功',
+          icon: 'success',
+          duration: 2000
+        })
       })
       // console.log(postData)
     }

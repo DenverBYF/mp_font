@@ -145,8 +145,7 @@
       time: '',
       range: [
         '默认规则',
-        '时时彩规则',
-        '待开发'
+        '实时彩票规则(根据开奖时最新一起彩票结果生成)'
       ],
       rangeIndex: 0
     }
@@ -199,7 +198,7 @@
         'max_number': e.detail.value.numberT,
         'gift_number': e.detail.value.numberZ,
         'pay_value': 1,
-        'rule_id': that.rangeIndex + 1,
+        'rule_id': parseInt(that.rangeIndex) + 1,
         'gift_name': e.detail.value.giftName,
         'gift_desc': e.detail.value.giftDesc,
         'open_time': time,
@@ -245,6 +244,19 @@
                 url: 'index'
               })
             }, 2000)
+          } else if (resData.ret_code === 10000) {
+            wx.showModal({
+              title: '',
+              content: '请先完善个人信息，以便于奖品邮寄',
+              showCancel: false,
+              success: res => {
+                if (res.confirm) {
+                  wx.redirectTo({
+                    url: '../my/set'
+                  })
+                }
+              }
+            })
           } else {
             wx.showModal({
               title: '创建失败',
@@ -277,6 +289,7 @@
     bindRuleChange(e) {
       let that = this
       that.rangeIndex = e.detail.value
+      console.log(that.rangeIndex)
     }
   }
 </script>
