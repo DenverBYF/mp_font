@@ -56,5 +56,12 @@
         })
       }
     }
+    onShareAppMessage() {
+      return {
+        title: '快来抽个奖吧',
+        path: '/pages/act/index',
+        success: function() {}
+      }
+    }
   }
 </script>

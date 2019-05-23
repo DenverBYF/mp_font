@@ -40,6 +40,9 @@
         <span wx:if="{{actInfo.status === 2}}">
           您已参加
         </span>
+        <span wx:if="{{actInfo.status === 3}}">
+          已开奖
+        </span>
       </view>
     </view>
   </view>
@@ -184,6 +187,13 @@
         that.actInfo = res.data.ret_data
         that.$apply()
       })
+    }
+    onShareAppMessage() {
+      return {
+        title: '快来抽个奖吧',
+        path: '/pages/act/detail?id = ' + this.id,
+        success: function() {}
+      }
     }
   }
 </script>
