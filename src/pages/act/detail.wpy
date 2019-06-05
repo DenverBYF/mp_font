@@ -31,18 +31,25 @@
         <button class="footer-button" form-type="submit" style="border-radius: 0">立即参与</button>
       </form>
       <view wx:else class="footer-button" style="opacity: 0.4">
-        <span wx:if="{{actInfo.status === 4}}">
+        <p wx:if="{{actInfo.status === 4}}">
           您已中奖
-        </span>
-        <span wx:if="{{actInfo.status === 5}}">
+        </p>
+        <p wx:if="{{actInfo.status === 5}}">
           您未中奖
-        </span>
-        <span wx:if="{{actInfo.status === 2}}">
-          您已参加
-        </span>
-        <span wx:if="{{actInfo.status === 3}}">
+        </p>
+        <p wx:if="{{actInfo.status === 2}}">
+          您已参加\n
+
+        </p>
+        <p wx:if="{{actInfo.status === 3}}">
           已开奖
-        </span>
+        </p>
+        <p wx:if="{{actInfo.lotteryId !== false}}">
+          您的开奖号码为:{{actInfo.lotteryId}}
+        </p>
+        <p wx:if="{{actInfo.lotteryId === false}}">
+          您未参与此次抽奖活动
+        </p>
       </view>
     </view>
   </view>
@@ -114,10 +121,11 @@
       width: 50%;
       font-size: 34rpx;
       text-align: center;
-      display: table;
-      span {
-        display: table-cell;
-        vertical-align: middle;
+      display: flex;
+      flex-direction: column;
+      p {
+        font-size: 14*2rpx;
+        line-height: 20*2rpx;
       }
     }
   }
